@@ -1,0 +1,28 @@
+{
+  "name": "api",
+  "version": "0.5.0",
+  "description": "Fantas Quidditch Simulator 1.0 API",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -L",
+    "test": "mocha -w ./tests/**/*.spec.js"
+  },
+  "author": "JotaCeR",
+  "license": "",
+  "dependencies": {
+    "axios": "^1.1.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.1.0",
+    "mongodb-memory-server": "^8.9.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.20",
+    "standard": "^17.0.0",
+    "supertest": "^6.3.1"
+  }
+}
