@@ -1,7 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-// const routes = require('./routes/index.js')
+const routes = require('./routes/index.js')
 
 const server = express();
 
@@ -16,17 +16,7 @@ server.use(
 server.use(morgan('dev'))
 server.use(cors())
 
-// server.use('/', routes)
-server.use('/', (req, res) => {
-    try {
-        console.log("Hello World!")
-        res.status(200).json({message: 'Success'})
-    } catch (e) {
-        const message = e.message || e
-        console.error(e)
-        res.status(400).send(message) 
-    }
-})
+server.use('/', routes)
 
 server.use((err, req, res, next) => {
     const status = err.status || 500
