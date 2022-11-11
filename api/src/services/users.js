@@ -2,18 +2,19 @@ const bcrypt = require('bcryptjs')
 
 class Hash {
     constructor () {
-        // this.salt = this.setSalt()
+        this.salt = null;
         this.hashed = null;
     }
 
     setHash = async (password) => {
-        const salt = await bcrypt.genSalt(10)
-        this.hashed = await bcrypt.hash(password, salt)
+        //const salt = await bcrypt.genSalt(10)
+        await this.setSalt()
+        this.hashed = await bcrypt.hash(password, this.salt)
     }
 
-    // async setSalt() {
-    //     return await bcrypt.genSalt(10)
-    // }
+    setSalt = async () => {
+        this.salt = await bcrypt.genSalt(10)
+    }
 }
 
 class Compare {

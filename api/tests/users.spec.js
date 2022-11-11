@@ -23,7 +23,7 @@ describe('E — Users', () => {
 
         })
 
-        it('Receive user input & hashs password', async () => {
+        it('Receive user input & hashes password', async () => {
             const response = await request(app).post('/users/signup').send({username: 'John', email: 'example@mail.com', password: 'password123'}).set('Accept', 'application/json')
             const compare = await bcrypt.compare('password123', response.body.password)
             expect(compare).to.equal(true)
