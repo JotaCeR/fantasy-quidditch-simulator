@@ -33,5 +33,4 @@ class SignUp {
     }
 }
 
-const signUp = new SignUp()
-module.exports = new UsersPresenter({ signUp })
+module.exports = new UsersPresenter({ signUp: new SignUp() })
