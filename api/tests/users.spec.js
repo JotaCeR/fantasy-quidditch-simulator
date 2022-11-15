@@ -18,19 +18,20 @@ describe('E — Users', () => {
 
     describe('Register', () => {
         it('Receive user input & responses successfully', async () => {
-            const response = await request(app).post('/users/signup').send({username: 'John', email: 'example@mail.com', password: 'password123'}).set('Accept', 'application/json')
+            const response = await request(app).post('/users/signup').send({username: 'John', email: 'example@mail.com', password: 'Password1!'}).set('Accept', 'application/json')
             expect(response.status).to.equal(200)
 
         })
 
         it('Receive user input & hashes password', async () => {
-            const response = await request(app).post('/users/signup').send({username: 'John', email: 'example@mail.com', password: 'password123'}).set('Accept', 'application/json')
-            const compare = await bcrypt.compare('password123', response.body.password)
+            const response = await request(app).post('/users/signup').send({username: 'John', email: 'example@mail.com', password: 'Password1!'}).set('Accept', 'application/json')
+            const compare = await bcrypt.compare('Password1!', response.body.password)
             expect(compare).to.equal(true)
         })
 
-        // it('', async () => {
-
-        // })
+        it('Receive user input & verifies password fullfill extension & characters type rule', async () => {
+            const response = await request(app).post('/users/signup').send({username: 'John', email: 'example@mail.com', password: 'Password1!' }).set('Accept', 'application/json')
+            expect(response.body.message).not.to.equal('Invalid password')
+        })
     })
 })
