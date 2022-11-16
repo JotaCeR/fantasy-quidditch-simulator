@@ -20,7 +20,6 @@ describe('E — Users', () => {
         it('Receive user input & responses successfully', async () => {
             const response = await request(app).post('/users/signup').send({username: 'John', email: 'example@mail.com', password: 'Password1!'}).set('Accept', 'application/json')
             expect(response.status).to.equal(200)
-
         })
 
         it('Receive user input & hashes password', async () => {
@@ -32,6 +31,10 @@ describe('E — Users', () => {
         it('Receive user input & verifies password fullfill extension & characters type rule', async () => {
             const response = await request(app).post('/users/signup').send({username: 'John', email: 'example@mail.com', password: 'Password1!' }).set('Accept', 'application/json')
             expect(response.body.message).not.to.equal('Invalid password')
+        })
+
+        xit('', async () => {
+
         })
     })
 })

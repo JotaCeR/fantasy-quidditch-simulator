@@ -1,4 +1,4 @@
-const { Hash, Compare, Verify } = require('../services/users')
+const { Hash, Compare } = require('../services/users')
 
 class UsersPresenter {
     constructor({ signUp }) {
@@ -12,17 +12,11 @@ class SignUp {
         this.email = null;
         this.password = null;
         this.hash = new Hash();
-        this.verify = new Verify();
     }
 
     createUser = async (req, res) => {
         try {
             this.setValues(req.body)
-            
-            if (!this.verify.verification(this.password, 'password')) {
-                res.status(400).json({ message: 'Invalid password' })
-            }
-
             await this.hash.setHash(this.password)
             res.status(200).json({ password: this.hash.hashed })
         } catch (e) {

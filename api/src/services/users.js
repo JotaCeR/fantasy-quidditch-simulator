@@ -38,22 +38,4 @@ class Compare {
     }
 }
 
-class Verify {
-    verification = (value, type) => {
-        if (type === "password") {
-            return this.passwordRule(value)
-        } else {
-            return this.emailRule(value)
-        }
-    }
-
-    passwordRule = (value) => {
-        return value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/)
-    }
-
-    emailRule = (value) => {
-        return value.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
-    }
-}
-
-module.exports = { Hash, Compare, Verify }
+module.exports = { Hash, Compare }
