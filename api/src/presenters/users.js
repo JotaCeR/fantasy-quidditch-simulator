@@ -18,7 +18,7 @@ class SignUp {
         try {
             this.setValues(req.body)
             await this.hash.setHash(this.password)
-            res.status(200).json({ password: this.hash.hashed })
+            res.status(200).json({ message: 'Success', password: this.hash.hashed })
         } catch (e) {
             const message = e.message || e
             console.error(message)

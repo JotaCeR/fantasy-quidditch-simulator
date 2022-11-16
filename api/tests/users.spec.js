@@ -28,9 +28,22 @@ describe('E — Users', () => {
             expect(compare).to.equal(true)
         })
 
-        it('Receive user input & verifies password fullfill extension & characters type rule', async () => {
+        it('Receive user input & verifies password fullfills extension & characters type rule', async () => {
             const response = await request(app).post('/users/signup').send({username: 'John', email: 'example@mail.com', password: 'Password1!' }).set('Accept', 'application/json')
             expect(response.body.message).not.to.equal('Invalid password')
+        })
+
+        it('Receive user input & verifies email fullfills format rule', async () => {
+            const response = await request(app).post('/users/signup').send({username: 'John', email: 'example@mail.com', password: 'Password1!' }).set('Accept', 'application/json')
+            expect(response.body.message).not.to.equal('Invalid email')
+        })
+
+        xit('', async () => {
+
+        })
+
+        xit('', async () => {
+
         })
 
         xit('', async () => {
