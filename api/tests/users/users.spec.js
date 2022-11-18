@@ -36,17 +36,17 @@ describe('Unit Testing — Users', () => {
         })
 
         it('2) Receives lacking signup values and throws an Exception correctly.', async () => {
-            // const args = { username: 'username', email: 'mail@example.com' }
-            // const SignUpPresenter = require('../../src/presenters/users/signup.js')
-            // const SignUpAction = require('../../src/actions/users/signup.js')
-            // const instance = new SignUpPresenter()
-            // const actionInstance = new SignUpAction()
-            // const mock = sinon.mock(actionInstance)
-            // mock.expects('activate').never()
-            // args.callback = actionInstance.activate
+            const args = { username: 'username', email: 'mail@example.com' }
+            const SignUpPresenter = require('../../src/presenters/users/signup.js')
+            const SignUpAction = require('../../src/actions/users/signup.js')
+            const instance = new SignUpPresenter()
+            const actionInstance = new SignUpAction()
+            const mock = sinon.mock(actionInstance)
+            mock.expects('activate').never()
+            args.callback = actionInstance.activate
 
-            // mock.verify()
-            // expect(instance.present(args)).to.include({ success: false, message: 'Required value(s) missing' })
+            mock.verify()
+            expect(instance.present(args)).to.include({ success: false, message: 'Required value(s) missing' })
         })
 
         xit('', async () => {

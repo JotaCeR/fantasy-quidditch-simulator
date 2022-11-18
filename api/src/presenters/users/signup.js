@@ -8,8 +8,8 @@ class SignUp {
             return callback({ username, email, password })
         } catch (e) {
             const message = e.message || e
-            console.error(e)
-            return { sucess: false, message, error: e.code || e }
+            console.error(message)
+            return { success: false, message, error: e.code || e }
         }
     }
 }
