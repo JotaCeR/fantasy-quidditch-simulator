@@ -25,6 +25,7 @@
     "mongodb-memory-server": "^8.9.3",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
+    "sinon": "^14.0.2",
     "standard": "^17.0.0",
     "supertest": "^6.3.1"
   }
