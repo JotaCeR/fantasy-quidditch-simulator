@@ -1,10 +1,6 @@
 class SignUp {
-    present = ({ username, email, password, callback }) => {
+    present = (username, email, password, callback) => {
         try {
-            if (!username || !email || !password) {
-                throw new Error('Required value(s) missing')
-            }
-
             return callback({ username, email, password })
         } catch (e) {
             const message = e.message || e

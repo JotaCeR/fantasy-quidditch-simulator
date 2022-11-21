@@ -1,18 +1,12 @@
 const bcrypt = require('bcryptjs')
 
 class Hash {
-    constructor () {
-        this.salt = null;
-        this.hashed = null;
-    }
-
     setHash = async (password) => {
-        await this.setSalt()
-        this.hashed = await bcrypt.hash(password, this.salt)
+        return await bcrypt.hash(password, await this.setSalt())
     }
 
     setSalt = async () => {
-        this.salt = await bcrypt.genSalt(10)
+        return await bcrypt.genSalt(10)
     }
 }
 
@@ -36,10 +30,10 @@ class Compare {
 class VerifyPassword {
     verify = (password) => {
         try {
-            if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/)) {
-                throw new Error('Invalid password')
-            } else {
+            if (password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/)) {
                 return true
+            } else {
+                return false
             }
         } catch (e) {
             const message = e.message || e
@@ -52,10 +46,10 @@ class VerifyPassword {
 class VerifyEmail {
     verify = (email) => {
         try {
-            if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
-                throw new Error('Invalid email')
-            } else {
+            if (email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
                 return true
+            } else {
+                return false
             }
         } catch (e) {
             const message = e.message || e

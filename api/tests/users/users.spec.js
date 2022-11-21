@@ -20,36 +20,56 @@ describe('Unit Testing — Users', () => {
         })
     })
 
-    describe('Signup Presenters', (done) => {
-        it('1) Receives signup values and handles them correctly.', () => {
-            const args = { username: 'username', email: 'mail@example.com', password: '12345' }
+    describe('Signup Presenter', () => {
+        it('1) Receives user s signup Request and calls Signup Action correctly.', () => {
+            const fakeCallback = sinon.spy()
             const SignUpPresenter = require('../../src/presenters/users/signup.js')
-            const SignUpAction = require('../../src/actions/users/signup.js')
-            const instance = new SignUpPresenter()
-            const actionInstance = new SignUpAction()
-            const mock = sinon.mock(actionInstance)
-            mock.expects('activate').once()
-            args.callback = actionInstance.activate
-
-            instance.present(args)
-            mock.verify()
+            const presenterInstance = new SignUpPresenter()
+            presenterInstance.present('Pepe', 'example@mail.com', 'Password123!', fakeCallback)
+            expect(fakeCallback.called).to.equal(true)
         })
 
-        it('2) Receives lacking signup values and throws an Exception correctly.', async () => {
+        xit('2) Receives lacking signup values and throws an Exception correctly.', () => {
             const args = { username: 'username', email: 'mail@example.com' }
             const SignUpPresenter = require('../../src/presenters/users/signup.js')
             const SignUpAction = require('../../src/actions/users/signup.js')
             const instance = new SignUpPresenter()
             const actionInstance = new SignUpAction()
             const mock = sinon.mock(actionInstance)
-            mock.expects('activate').never()
+            mock.expects('activate').never().throws()
             args.callback = actionInstance.activate
 
-            mock.verify()
             expect(instance.present(args)).to.include({ success: false, message: 'Required value(s) missing' })
+            mock.verify()
         })
+    })
 
-        xit('', async () => {
+    xdescribe('Signup Action', () => {
+        it('1) Receives signup values and calls proper services for validating input.', async () => {
+            const SignUpAction = require('../../src/actions/users/signup.js')
+            const instance = new SignUpAction()
+            const signUpServices = require('../../src/services/users/signup.js')
+            const servicesInstance = {
+                validatePassword: signUpServices.passwordValidator.verify,
+                validateEmail: signUpServices.emailValidator.verify,
+                hash: signUpServices.hash.setHash,
+                salt: signUpServices.hash.setSalt,
+                createUser: signUpServices.createUser.newUser,
+            }
+            const mock = sinon.mock(servicesInstance)
+            mock.expects('validatePassword').once().throws()
+            mock.expects('validateEmail').once().throws()
+            mock.expects('hash').once().throws()
+            mock.expects('salt').once().throws()
+            mock.expects('createUser').once().throws()
+
+            await instance.activate({ username: 'username', email: 'example@mail.com', password: '@Password1!aaaAAA' }, servicesInstance)
+            mock.verify()
+        })
+    })
+
+    xdescribe('', () => {
+        xit('', () => {
 
         })
     })
