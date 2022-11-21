@@ -1,7 +1,7 @@
 class SignUp {
-    present = (username, email, password, callback) => {
+    present = async (username, email, password, callback) => {
         try {
-            return callback({ username, email, password })
+            return await callback({ username, email, password })
         } catch (e) {
             const message = e.message || e
             console.error(message)

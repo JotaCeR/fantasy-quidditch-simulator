@@ -29,42 +29,19 @@ describe('Unit Testing — Users', () => {
             expect(fakeCallback.called).to.equal(true)
         })
 
-        xit('2) Receives lacking signup values and throws an Exception correctly.', () => {
-            const args = { username: 'username', email: 'mail@example.com' }
-            const SignUpPresenter = require('../../src/presenters/users/signup.js')
-            const SignUpAction = require('../../src/actions/users/signup.js')
-            const instance = new SignUpPresenter()
-            const actionInstance = new SignUpAction()
-            const mock = sinon.mock(actionInstance)
-            mock.expects('activate').never().throws()
-            args.callback = actionInstance.activate
-
-            expect(instance.present(args)).to.include({ success: false, message: 'Required value(s) missing' })
-            mock.verify()
+        xit('2) ???', () => {
+            //
         })
     })
 
-    xdescribe('Signup Action', () => {
-        it('1) Receives signup values and calls proper services for validating input.', async () => {
+    describe('Signup Action', () => {
+        it('1) Receives signup s presentation and calls signup s service.', async () => {
             const SignUpAction = require('../../src/actions/users/signup.js')
-            const instance = new SignUpAction()
-            const signUpServices = require('../../src/services/users/signup.js')
-            const servicesInstance = {
-                validatePassword: signUpServices.passwordValidator.verify,
-                validateEmail: signUpServices.emailValidator.verify,
-                hash: signUpServices.hash.setHash,
-                salt: signUpServices.hash.setSalt,
-                createUser: signUpServices.createUser.newUser,
-            }
-            const mock = sinon.mock(servicesInstance)
-            mock.expects('validatePassword').once().throws()
-            mock.expects('validateEmail').once().throws()
-            mock.expects('hash').once().throws()
-            mock.expects('salt').once().throws()
-            mock.expects('createUser').once().throws()
+            const actionInstance = new SignUpAction()
+            const fakeCallback = sinon.spy()
 
-            await instance.activate({ username: 'username', email: 'example@mail.com', password: '@Password1!aaaAAA' }, servicesInstance)
-            mock.verify()
+            actionInstance.activate({ username: 'Username', email: 'example@mail.com', password: 'Password1!'}, fakeCallback)
+            expect(fakeCallback.called).to.equal(true)
         })
     })
 

@@ -1,6 +1,12 @@
 class SignUp {
-    activate = ({ username, email, password }) => {
-        return true
+    activate = async (input, callback) => {
+        try {
+            return await callback(input)
+        } catch (e) {
+            const message = e.message || e
+            console.error(e)
+            return { success: false, message, error: e.code || e }
+        }
     }
 }
 
