@@ -1,7 +1,7 @@
 class SignUp {
     activate = async (input, callback) => {
         try {
-            return await callback(input)
+            return await callback.createUser(input)
         } catch (e) {
             const message = e.message || e
             console.error(e)

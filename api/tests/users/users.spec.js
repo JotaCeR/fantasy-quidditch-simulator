@@ -40,8 +40,20 @@ describe('Unit Testing — Users', () => {
             const actionInstance = new SignUpAction()
             const fakeCallback = sinon.spy()
 
-            actionInstance.activate({ username: 'Username', email: 'example@mail.com', password: 'Password1!'}, fakeCallback)
+            actionInstance.activate({ username: 'Username', email: 'example@mail.com', password: 'Password1!'}, { createUser: fakeCallback})
             expect(fakeCallback.called).to.equal(true)
+        })
+    })
+
+    xdescribe('Signup Service', () => {
+        xit('1) Receives signup s activation and ', () => {
+
+        })
+    })
+
+    xdescribe('', () => {
+        xit('', () => {
+
         })
     })
 
