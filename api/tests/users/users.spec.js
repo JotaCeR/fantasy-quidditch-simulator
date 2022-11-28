@@ -44,14 +44,28 @@ describe('Unit Testing — Users', () => {
         })
     })
 
-    xdescribe('Signup Action', () => {
-        it('1) Receives signup s presentation and calls signup s service.', async () => {
+    describe('Signup Action', () => {
+        it('1) Receives signup s presentation invocation and calls Signup Service invoking method correctly.', async () => {
             const SignUpAction = require('../../src/actions/users/signup.js')
             const actionInstance = new SignUpAction()
-            const fakeCallback = sinon.spy()
+            const fake = sinon.fake()
+            sinon.replace(actionInstance, 'invokeService', fake)
 
-            await actionInstance.activate({ username: 'Username', email: 'example@mail.com', password: 'Password1!'}, { createUser: fakeCallback})
-            expect(fakeCallback.called).to.equal(true)
+            await actionInstance.activate('Username', 'mail@example.com', 'Password123!')
+
+            expect(fake.calledWith('Username', 'mail@example.com', 'Password123!')).to.equal(true)
+        })
+
+        it('2) Executes Signup Service invoking method correctly.', async () => {
+            const SignUpAction = require('../../src/actions/users/signup.js')
+            const service = {
+                serve: sinon.fake()
+            }
+            const actionInstance = new SignUpAction(service)
+
+            await actionInstance.activate('Username', 'mail@example.com', 'Password123!')
+
+            expect(service.serve.calledWith('Username', 'mail@example.com', 'Password123!')).to.equal(true)
         })
     })
 
