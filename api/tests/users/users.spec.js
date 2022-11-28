@@ -21,7 +21,7 @@ describe('Unit Testing — Users', () => {
     })
 
     describe('Signup Presenter', () => {
-        it('1) Receives user s signup Request and calls Signup Action correctly.', async () => {
+        it('1) Receives user s signup Request and calls Signup Action invoking method correctly.', async () => {
             const SignUpPresenter = require('../../src/presenters/users/signup.js')
             const presenterInstance = new SignUpPresenter()
             const fake = sinon.fake()
@@ -32,8 +32,15 @@ describe('Unit Testing — Users', () => {
             expect(fake.calledWith('Pepe', 'example@mail.com', 'Password123!')).to.equal(true)
         })
 
-        xit('2) ???', () => {
-            //
+        it('2) Executes Signup Action invoking method correctly.', async () => {
+            const SignUpPresenter = require('../../src/presenters/users/signup.js')
+            const action = {
+                activate: sinon.fake()
+            }
+            const presenterInstance = new SignUpPresenter(action)
+            await presenterInstance.present('Pepe', 'example@mail.com', 'Password123!')
+            
+            expect(action.activate.calledWith('Pepe', 'example@mail.com', 'Password123!')).to.equal(true)
         })
     })
 

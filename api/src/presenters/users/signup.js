@@ -15,7 +15,7 @@ class SignUp {
 
     invokeAction = async (username, email, password) => {
         try {
-            return true
+            return await this.dependency.activate(username, email, password)
         } catch (e) {
             const message = e.message || e
             console.error(message)
