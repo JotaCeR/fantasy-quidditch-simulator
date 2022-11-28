@@ -21,12 +21,15 @@ describe('Unit Testing — Users', () => {
     })
 
     describe('Signup Presenter', () => {
-        it('1) Receives user s signup Request and calls Signup Action correctly.', () => {
-            const fakeCallback = sinon.spy()
+        it('1) Receives user s signup Request and calls Signup Action correctly.', async () => {
             const SignUpPresenter = require('../../src/presenters/users/signup.js')
             const presenterInstance = new SignUpPresenter()
-            presenterInstance.present('Pepe', 'example@mail.com', 'Password123!', fakeCallback)
-            expect(fakeCallback.called).to.equal(true)
+            const fake = sinon.fake()
+            sinon.replace(presenterInstance, 'invokeAction', fake)
+
+            await presenterInstance.present('Pepe', 'example@mail.com', 'Password123!')
+
+            expect(fake.calledWith('Pepe', 'example@mail.com', 'Password123!')).to.equal(true)
         })
 
         xit('2) ???', () => {
@@ -34,20 +37,23 @@ describe('Unit Testing — Users', () => {
         })
     })
 
-    describe('Signup Action', () => {
+    xdescribe('Signup Action', () => {
         it('1) Receives signup s presentation and calls signup s service.', async () => {
             const SignUpAction = require('../../src/actions/users/signup.js')
             const actionInstance = new SignUpAction()
             const fakeCallback = sinon.spy()
 
-            actionInstance.activate({ username: 'Username', email: 'example@mail.com', password: 'Password1!'}, { createUser: fakeCallback})
+            await actionInstance.activate({ username: 'Username', email: 'example@mail.com', password: 'Password1!'}, { createUser: fakeCallback})
             expect(fakeCallback.called).to.equal(true)
         })
     })
 
     xdescribe('Signup Service', () => {
-        xit('1) Receives signup s activation and ', () => {
+        it('1) Receives signup s activation and provides proper service.', async () => {
+            const SignUpService = require('../../src/services/users/signup.js')
+            const serviceInstance = new SignUpService()
 
+            serviceInstance.createUser({ username: 'Username', email: 'example@mail.com', password: 'Password1!' })
         })
     })
 
