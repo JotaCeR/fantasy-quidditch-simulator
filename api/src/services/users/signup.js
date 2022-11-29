@@ -1,12 +1,15 @@
 const bcrypt = require('bcryptjs')
 
 class SignUp {
-    serve = (username, email, password) => {
+    constructor (DAO) {
+        this.dependency = DAO
+    }
+
+    serve = async (username, email, password) => {
         try {
             if (this.validatePassword(password) && this.validateEmail(email)) {
-                return this.invokeDAO(username, email, this.hashPassword(password))
+                return await this.invokeDAO(username, email, await this.hashPassword(password))
             }
-            console.log('not passes')
             throw new Error('Invalid input')
         } catch (e) {
             const message = e.message || e
@@ -51,8 +54,20 @@ class SignUp {
         }
     }
 
-    invokeDAO = (user) => {
-        
+    invokeDAO = async (username, email, password) => {
+        try {
+            const user = {
+                username,
+                email,
+                password
+            }
+            
+            return await this.dependency.saveUser(user)
+        } catch (e) {
+            const message = e.message || e
+            console.error(e)
+            return { success: false, message, error: e.code || e }
+        }
     }
 }
 

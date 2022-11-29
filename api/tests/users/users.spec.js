@@ -72,7 +72,7 @@ describe('Unit Testing — Users', () => {
     describe('Signup Service', () => {
         it('1) Receives signup s activation invocation and Signup Service "create user" method calls proper services correctly.', async () => {
             const SignUpService = require('../../src/services/users/signup.js')
-            const serviceInstance = new SignUpService()
+            const serviceInstance = new SignUpService({ saveUser: sinon.fake() })
             const fake = sinon.fake.returns(true)
             const fake2 = sinon.fake.returns(true)
             const fake3 = sinon.fake.returns(true)
@@ -87,7 +87,7 @@ describe('Unit Testing — Users', () => {
             expect(fake.calledWith('Password1!')).to.equal(true)
             expect(fake2.calledWith('example@mail.com')).to.equal(true)
             expect(fake3.calledWith('Password1!')).to.equal(true)
-            expect(fake4.calledWith('Username', 'example@mail.com', true)).to.equal(true)
+            expect(fake4.calledWith('Username', 'example@mail.com')).to.equal(true)
         })
 
         it('2) Validate Password service checks password and returns true if valid format matches.', () => {
@@ -132,8 +132,16 @@ describe('Unit Testing — Users', () => {
             expect(compare).to.equal(true)
         })
 
-        it('7) ???', async () => {
-            
+        it('7) Executes Signup DAO invoking method correctly.', async () => {
+            const SignUpService = require('../../src/services/users/signup.js')
+            const dependency = {
+                saveUser: sinon.fake()
+            }
+            const serviceInstance = new SignUpService(dependency)
+
+            await serviceInstance.serve('Username', 'example@mail.com', 'Password1!')
+
+            expect(dependency.saveUser.called).to.equal(true)
         })
     })
 
