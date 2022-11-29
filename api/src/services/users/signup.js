@@ -1,74 +1,43 @@
 const bcrypt = require('bcryptjs')
 
-class Hash {
-    setHash = async (password) => {
-        return await bcrypt.hash(password, await this.setSalt())
-    }
-
-    setSalt = async () => {
-        return await bcrypt.genSalt(10)
-    }
-}
-
-class Compare {
-    compare = async (password, hash) => {
+class SignUp {
+    serve = (username, email, password) => {
         try {
-            const flag = await bcrypt.compare(password, hash)
-            if (!flag) {
-                throw new Error('Incorrect password')
-            } else {
-                return flag
+            if (this.validatePassword(password) && this.validateEmail(email)) {
+                return this.invokeDAO(username, email, this.hashPassword(password))
             }
+            console.log('not passes')
+            throw new Error('Invalid input')
         } catch (e) {
             const message = e.message || e
-            console.error(message)
+            console.error(e)
             return { success: false, message, error: e.code || e }
         }
     }
-}
 
-class VerifyPassword {
-    verify = (password) => {
-        try {
-            if (password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/)) {
-                return true
-            } else {
-                return false
-            }
-        } catch (e) {
-            const message = e.message || e
-            console.error(message)
-            return { success: false, message, error: e.code || e }
-        }
+    validatePassword = (password) => {
+        return true
     }
-}
-
-class VerifyEmail {
-    verify = (email) => {
-        try {
-            if (email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
-                return true
-            } else {
-                return false
-            }
-        } catch (e) {
-            const message = e.message || e
-            console.error(message)
-            return { success: false, message, error: e.code || e }
-        }
+    
+    validateEmail = (email) => {
+        return true
     }
-}
 
-class CreateUser {
-    newUser = async ({ username, email, password }) => {
+    hashPassword = (password) => {
+        return true
+    }
+
+    invokeDAO = (user) => {
         return true
     }
 }
 
-module.exports = { 
-    hash: new Hash(),
-    compare: new Compare(),
-    passwordValidator: new VerifyPassword(),
-    emailValidator: new VerifyEmail(),
-    createUser: new CreateUser(),
-}
+module.exports = SignUp
+
+// bcrypt.hash(password, await this.setSalt())
+// bcrypt.genSalt(10)
+// password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/)
+// email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+
+
+

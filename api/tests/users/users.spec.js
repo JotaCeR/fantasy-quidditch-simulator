@@ -69,12 +69,25 @@ describe('Unit Testing — Users', () => {
         })
     })
 
-    xdescribe('Signup Service', () => {
-        it('1) Receives signup s activation and provides proper service.', async () => {
+    describe('Signup Service', () => {
+        it('1) Receives signup s activation invocation and Signup Service "create user" method calls proper services correctly.', async () => {
             const SignUpService = require('../../src/services/users/signup.js')
             const serviceInstance = new SignUpService()
+            const fake = sinon.fake.returns(true)
+            const fake2 = sinon.fake.returns(true)
+            const fake3 = sinon.fake.returns(true)
+            const fake4 = sinon.fake.returns(true)
+            sinon.replace(serviceInstance, 'validatePassword', fake)
+            sinon.replace(serviceInstance, 'validateEmail', fake2)
+            sinon.replace(serviceInstance, 'hashPassword', fake3)
+            sinon.replace(serviceInstance, 'invokeDAO', fake4)
 
-            serviceInstance.createUser({ username: 'Username', email: 'example@mail.com', password: 'Password1!' })
+            await serviceInstance.serve('Username', 'example@mail.com', 'Password1!')
+
+            expect(fake.calledWith('Password1!')).to.equal(true)
+            expect(fake2.calledWith('example@mail.com')).to.equal(true)
+            expect(fake3.calledWith('Password1!')).to.equal(true)
+            expect(fake4.calledWith('Username', 'example@mail.com', true)).to.equal(true)
         })
     })
 
