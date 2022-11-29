@@ -105,6 +105,25 @@ describe('Unit Testing — Users', () => {
             expect(result).not.to.equal(true)
             expect(result).to.include({ success: false, message: 'Invalid password' })
         })
+
+        it('4) Validate Email service checks email and returns true if valid format matches.', () => {
+            const SignUpService = require('../../src/services/users/signup.js')
+            const serviceInstance = new SignUpService()
+
+            expect(serviceInstance.validateEmail('example@mail.com')).to.equal(true)
+        })
+
+        xit('', () => {
+
+        })
+
+        xit('', () => {
+
+        })
+
+        xit('', () => {
+
+        })
     })
 
     xdescribe('', () => {

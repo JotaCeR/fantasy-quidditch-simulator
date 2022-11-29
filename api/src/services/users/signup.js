@@ -29,7 +29,7 @@ class SignUp {
     }
     
     validateEmail = (email) => {
-        
+        return email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/) ? true : false
     }
 
     hashPassword = (password) => {
@@ -45,8 +45,6 @@ module.exports = SignUp
 
 // bcrypt.hash(password, await this.setSalt())
 // bcrypt.genSalt(10)
-// password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/)
-// email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
 
 
 
