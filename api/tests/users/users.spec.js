@@ -89,11 +89,21 @@ describe('Unit Testing — Users', () => {
             expect(fake3.calledWith('Password1!')).to.equal(true)
             expect(fake4.calledWith('Username', 'example@mail.com', true)).to.equal(true)
         })
-    })
 
-    xdescribe('', () => {
-        xit('', () => {
+        it('2) Validate Password service checks password and returns true if valid format matches.', () => {
+            const SignUpService = require('../../src/services/users/signup.js')
+            const serviceInstance = new SignUpService()
 
+            expect(serviceInstance.validatePassword('Password1!')).to.equal(true)
+        })
+
+        it('3) Validate Password service checks password and throws Exception if input it s invalid.', () => {
+            const SignUpService = require('../../src/services/users/signup.js')
+            const serviceInstance = new SignUpService()
+            const result = serviceInstance.validatePassword('zzz')
+
+            expect(result).not.to.equal(true)
+            expect(result).to.include({ success: false, message: 'Invalid password' })
         })
     })
 

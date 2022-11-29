@@ -16,19 +16,28 @@ class SignUp {
     }
 
     validatePassword = (password) => {
-        return true
+        try {
+            if (password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/)) {
+                return true
+            }
+            throw new Error('Invalid password')
+        } catch (e) {
+            const message = e.message || e
+            console.error(e)
+            return { success: false, message, error: e.code || e }
+        }
     }
     
     validateEmail = (email) => {
-        return true
+        
     }
 
     hashPassword = (password) => {
-        return true
+        
     }
 
     invokeDAO = (user) => {
-        return true
+        
     }
 }
 
