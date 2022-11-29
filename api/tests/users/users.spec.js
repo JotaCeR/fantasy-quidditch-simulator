@@ -3,10 +3,15 @@ const request = require('supertest')
 const sinon = require('sinon')
 const bcrypt = require('bcryptjs')
 const app = require('../../src/app.js')
-const dataBase = require('../../src/database')
-process.env.NODE_ENV = 'test'
+const database = require('../../src/database')
 
 describe('Unit Testing — Users', () => {
+    process.env.NODE_ENV = 'test'
+
+    afterEach(() => {
+        sinon.restore()
+    })
+
     describe('Signup HTTP Requests', () => {
         it('1) Server receives successfully POST request /users/signup', async () => {
             const response = await request(app).post('/users/signup').set('Accept', 'application/json')
@@ -161,6 +166,35 @@ describe('Unit Testing — Users', () => {
             await DAOInstance.saveUser(user)
 
             expect(dbDependency.signUser.calledWith(user)).to.equal(true)
+        })
+    })
+
+    describe('Signup Database', () => {
+        beforeEach(async () => {
+            await database.instance.connectDB()
+        })
+
+        afterEach(async () => {
+            await database.instance.disconnectDB()
+        })
+
+        it('1) Receives user object and signs it on the DB.', async () => {
+            const DatabaseSignUp = require('../../src/database/users/signup')
+            const databaseInstance = new DatabaseSignUp()
+            const user = {
+                username: 'Username',
+                email: 'example@mail.com',
+                password: '###'
+            }
+
+            const result = await databaseInstance.signUser(user)
+
+            expect(result).to.include({ success: true })
+            expect(result).to.have.property('id')
+        })
+
+        xit('', async () => {
+            
         })
     })
 })
