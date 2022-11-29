@@ -29,7 +29,16 @@ class SignUp {
     }
     
     validateEmail = (email) => {
-        return email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/) ? true : false
+        try {
+            if (email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+                return true
+            }
+            throw new Error('Invalid email')
+        } catch (e) {
+            const message = e.message || e
+            console.error(e)
+            return { success: false, message, error: e.code || e }
+        }
     }
 
     hashPassword = (password) => {

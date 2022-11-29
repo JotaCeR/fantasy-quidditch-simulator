@@ -113,8 +113,13 @@ describe('Unit Testing — Users', () => {
             expect(serviceInstance.validateEmail('example@mail.com')).to.equal(true)
         })
 
-        xit('', () => {
+        it('5) Validate Email service checks email and throws Exception when input format it s invalid.', () => {
+            const SignUpService = require('../../src/services/users/signup.js')
+            const serviceInstance = new SignUpService()
+            const result = serviceInstance.validateEmail('zzz')
 
+            expect(result).not.true.equal(true)
+            expect(result).to.include({ success: false, message: 'Invalid email' })
         })
 
         xit('', () => {
