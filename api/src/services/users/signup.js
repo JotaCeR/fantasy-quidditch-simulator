@@ -72,9 +72,3 @@ class SignUp {
 }
 
 module.exports = SignUp
-
-// bcrypt.hash(password, await this.setSalt())
-// bcrypt.genSalt(10)
-
-
-

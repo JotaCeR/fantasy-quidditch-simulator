@@ -145,9 +145,22 @@ describe('Unit Testing — Users', () => {
         })
     })
 
-    xdescribe('', () => {
-        xit('', () => {
+    describe('Signup DAO', () => {
+        it('1) Receives signup s serve invocation and Signup DAO calls DB for saving new user object. ', async () => {
+            const SignUpDAO = require("../../src/DAO's/users/signup.js")
+            const dbDependency = {
+                signUser: sinon.fake.returns()
+            }
+            const DAOInstance = new SignUpDAO(dbDependency)
+            const user = {
+                username: 'Username',
+                email: 'example@mail.com',
+                password: '####'
+            }
 
+            await DAOInstance.saveUser(user)
+
+            expect(dbDependency.signUser.calledWith(user)).to.equal(true)
         })
     })
 })
