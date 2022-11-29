@@ -41,8 +41,14 @@ class SignUp {
         }
     }
 
-    hashPassword = (password) => {
-        
+    hashPassword = async (password) => {
+        try {
+            return await bcrypt.hash(password, await bcrypt.genSalt(10))
+        } catch (e) {
+            const message = e.message || e
+            console.error(e)
+            return { success: false, message, error: e.code || e }
+        }
     }
 
     invokeDAO = (user) => {

@@ -122,12 +122,18 @@ describe('Unit Testing — Users', () => {
             expect(result).to.include({ success: false, message: 'Invalid email' })
         })
 
-        xit('', () => {
+        it('6) Hash Password service receives a string and hashes the string correctly.', async () => {
+            const SignUpService = require('../../src/services/users/signup.js')
+            const serviceInstance = new SignUpService()
+            const result = await serviceInstance.hashPassword('Password1!')
+            const compare = await bcrypt.compare('Password1!', result)
 
+            expect(result).not.to.equal('Password1!')
+            expect(compare).to.equal(true)
         })
 
-        xit('', () => {
-
+        it('7) ???', async () => {
+            
         })
     })
 
