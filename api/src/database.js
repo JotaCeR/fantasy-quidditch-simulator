@@ -9,13 +9,13 @@ class DataBase {
     constructor (username, password) {
         this.uri = `mongodb+srv://${username}:${password}@cluster0.qdfvrf9.mongodb.net/?retryWrites=true&w=majority`;
         this.mongod = null;
-        this.flag = '';
+        this.flag = ' ';
     }
 
     connectDB = async () => {
         try {
             if (process.env.NODE_ENV === 'test') {
-                this.flag = 'TESTING MODE'
+                this.flag = ' |TESTING MODE| '
                 this.mongod = await MongoMemoryServer.create()
                 this.uri = this.mongod.getUri()
             }
@@ -25,7 +25,7 @@ class DataBase {
                 useUnifiedTopology: true,
             })
 
-            console.log(`%s Atlas MongoDB ${this.flag} is connected`)
+            console.log(`%s Atlas MongoDB${this.flag}is connected`)
         } catch (e) {
             console.error(e)
             process.exit(1)
@@ -39,7 +39,7 @@ class DataBase {
                 await this.mongod.stop()
             }
             
-            console.log(`%s Atlas MongoDB ${this.flag} is disconnected`)
+            console.log(`%s Atlas MongoDB${this.flag}is disconnected`)
         } catch (e) {
             console.error(e)
             process.exit(1)

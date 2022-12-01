@@ -26,7 +26,7 @@ describe('Unit Testing — Users', () => {
     })
 
     describe('Signup Presenter', () => {
-        it('1) Receives user s signup Request and calls Signup Action invoking method correctly.', async () => {
+        it('1) Receives user s signup Request and calls Signup Action invoking method correctly', async () => {
             const SignUpPresenter = require('../../src/presenters/users/signup.js')
             const presenterInstance = new SignUpPresenter()
             const fake = sinon.fake()
@@ -37,7 +37,7 @@ describe('Unit Testing — Users', () => {
             expect(fake.calledWith('Pepe', 'example@mail.com', 'Password123!')).to.equal(true)
         })
 
-        it('2) Executes Signup Action invoking method correctly.', async () => {
+        it('2) Executes Signup Action invoking method correctly', async () => {
             const SignUpPresenter = require('../../src/presenters/users/signup.js')
             const action = {
                 activate: sinon.fake()
@@ -50,7 +50,7 @@ describe('Unit Testing — Users', () => {
     })
 
     describe('Signup Action', () => {
-        it('1) Receives signup s presentation invocation and calls Signup Service invoking method correctly.', async () => {
+        it('1) Receives signup s presentation invocation and calls Signup Service invoking method correctly', async () => {
             const SignUpAction = require('../../src/actions/users/signup.js')
             const actionInstance = new SignUpAction()
             const fake = sinon.fake()
@@ -61,7 +61,7 @@ describe('Unit Testing — Users', () => {
             expect(fake.calledWith('Username', 'mail@example.com', 'Password123!')).to.equal(true)
         })
 
-        it('2) Executes Signup Service invoking method correctly.', async () => {
+        it('2) Executes Signup Service invoking method correctly', async () => {
             const SignUpAction = require('../../src/actions/users/signup.js')
             const service = {
                 serve: sinon.fake()
@@ -75,9 +75,9 @@ describe('Unit Testing — Users', () => {
     })
 
     describe('Signup Service', () => {
-        it('1) Receives signup s activation invocation and Signup Service "create user" method calls proper services correctly.', async () => {
+        it('1) Receives signup s activation invocation and Signup Service "create user" method calls proper services correctly', async () => {
             const SignUpService = require('../../src/services/users/signup.js')
-            const serviceInstance = new SignUpService({ saveUser: sinon.fake() })
+            const serviceInstance = new SignUpService({ signUser: sinon.fake() })
             const fake = sinon.fake.returns(true)
             const fake2 = sinon.fake.returns(true)
             const fake3 = sinon.fake.returns(true)
@@ -85,7 +85,7 @@ describe('Unit Testing — Users', () => {
             sinon.replace(serviceInstance, 'validatePassword', fake)
             sinon.replace(serviceInstance, 'validateEmail', fake2)
             sinon.replace(serviceInstance, 'hashPassword', fake3)
-            sinon.replace(serviceInstance, 'invokeDAO', fake4)
+            sinon.replace(serviceInstance, 'invokeRepository', fake4)
 
             await serviceInstance.serve('Username', 'example@mail.com', 'Password1!')
 
@@ -95,14 +95,14 @@ describe('Unit Testing — Users', () => {
             expect(fake4.calledWith('Username', 'example@mail.com')).to.equal(true)
         })
 
-        it('2) Validate Password service checks password and returns true if valid format matches.', () => {
+        it('2) Validate Password service checks password and returns true if valid format matches', () => {
             const SignUpService = require('../../src/services/users/signup.js')
             const serviceInstance = new SignUpService()
 
             expect(serviceInstance.validatePassword('Password1!')).to.equal(true)
         })
 
-        it('3) Validate Password service checks password and throws Exception if input it s invalid.', () => {
+        it('3) Validate Password service checks password and throws Exception if input it s invalid', () => {
             const SignUpService = require('../../src/services/users/signup.js')
             const serviceInstance = new SignUpService()
             const result = serviceInstance.validatePassword('zzz')
@@ -111,14 +111,14 @@ describe('Unit Testing — Users', () => {
             expect(result).to.include({ success: false, message: 'Invalid password' })
         })
 
-        it('4) Validate Email service checks email and returns true if valid format matches.', () => {
+        it('4) Validate Email service checks email and returns true if valid format matches', () => {
             const SignUpService = require('../../src/services/users/signup.js')
             const serviceInstance = new SignUpService()
 
             expect(serviceInstance.validateEmail('example@mail.com')).to.equal(true)
         })
 
-        it('5) Validate Email service checks email and throws Exception when input format it s invalid.', () => {
+        it('5) Validate Email service checks email and throws Exception when input format it s invalid', () => {
             const SignUpService = require('../../src/services/users/signup.js')
             const serviceInstance = new SignUpService()
             const result = serviceInstance.validateEmail('zzz')
@@ -127,7 +127,7 @@ describe('Unit Testing — Users', () => {
             expect(result).to.include({ success: false, message: 'Invalid email' })
         })
 
-        it('6) Hash Password service receives a string and hashes the string correctly.', async () => {
+        it('6) Hash Password service receives a string and hashes the string correctly', async () => {
             const SignUpService = require('../../src/services/users/signup.js')
             const serviceInstance = new SignUpService()
             const result = await serviceInstance.hashPassword('Password1!')
@@ -137,60 +137,42 @@ describe('Unit Testing — Users', () => {
             expect(compare).to.equal(true)
         })
 
-        it('7) Executes Signup DAO invoking method correctly.', async () => {
+        it('7) Executes Signup Repository invoking method correctly', async () => {
             const SignUpService = require('../../src/services/users/signup.js')
             const dependency = {
-                saveUser: sinon.fake()
+                signUser: sinon.fake()
             }
             const serviceInstance = new SignUpService(dependency)
 
             await serviceInstance.serve('Username', 'example@mail.com', 'Password1!')
 
-            expect(dependency.saveUser.called).to.equal(true)
+            expect(dependency.signUser.called).to.equal(true)
         })
     })
 
-    describe('Signup DAO', () => {
-        it('1) Receives signup s serve invocation and Signup DAO calls DB for saving new user object. ', async () => {
-            const SignUpDAO = require("../../src/DAO's/users/signup.js")
-            const dbDependency = {
-                signUser: sinon.fake.returns()
-            }
-            const DAOInstance = new SignUpDAO(dbDependency)
-            const user = {
-                username: 'Username',
-                email: 'example@mail.com',
-                password: '####'
-            }
-
-            await DAOInstance.saveUser(user)
-
-            expect(dbDependency.signUser.calledWith(user)).to.equal(true)
-        })
-    })
-
-    describe('Signup Database', () => {
+    describe('Signup Repository', () => {
         beforeEach(async () => {
-            await database.instance.connectDB()
+            return await database.instance.connectDB()
         })
 
         afterEach(async () => {
-            await database.instance.disconnectDB()
+            return await database.instance.disconnectDB()
         })
 
-        it('1) Receives user object and signs it on the DB.', async () => {
-            const DatabaseSignUp = require('../../src/database/users/signup')
-            const databaseInstance = new DatabaseSignUp()
+        it('1) Receives user object and signs it on the DB', async () => {
+            const RepositorySignUp = require('../../src/repository/users/signup.js')
+            const repositoryInstance = new RepositorySignUp()
             const user = {
                 username: 'Username',
                 email: 'example@mail.com',
                 password: '###'
             }
 
-            const result = await databaseInstance.signUser(user)
+            const result = await repositoryInstance.signUser(user)
 
             expect(result).to.include({ success: true })
             expect(result).to.have.property('id')
+            expect(typeof result.id === 'string').to.equal(true)
         })
 
         xit('', async () => {
