@@ -164,6 +164,20 @@ describe('Unit Testing — Users', () => {
 
             expect(dependency.checkEmail.calledWith('example@mail.com')).to.equal(true)
         })
+
+        it('9) Returns object with token and boolean true in case of sucess', async () => {
+            const SignUpService = require('../../src/services/users/signup.js')
+            const dependency = {
+                signUser: sinon.fake.returns({ id: 'Magikarp#129' }),
+                checkEmail: sinon.fake.returns(false)
+            }
+            const serviceInstance = new SignUpService(dependency)
+
+            const result = await serviceInstance.serve('Username', 'example@mail.com', 'Password1!')
+
+            expect(result).to.include({ success: true })
+            expect(result).to.have.property('token')
+        })
     })
 
     describe('Signup Repository', () => {

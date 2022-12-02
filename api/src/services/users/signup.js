@@ -1,4 +1,7 @@
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
+const { JWT_SECRET } = process.env
 
 class SignUp {
     constructor (repository) {
@@ -8,7 +11,8 @@ class SignUp {
     serve = async (username, email, password) => {
         try {
             if (this.validatePassword(password) && this.validateEmail(email) && await this.verifyEmail(email)) {
-                return await this.invokeRepository(username, email, await this.hashPassword(password))
+                const sign = await this.invokeRepository(username, email, await this.hashPassword(password))
+                return { success: true, token: this.signToken(sign.id) }
             }
             throw new Error('Invalid input')
         } catch (e) {
@@ -83,6 +87,10 @@ class SignUp {
             console.error(e)
             return { success: false, message, error: e.code || e }
         }
+    }
+
+    signToken = (credential) => {
+        return jwt.sign({ credential }, JWT_SECRET)
     }
 }
 
