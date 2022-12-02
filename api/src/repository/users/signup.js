@@ -12,6 +12,16 @@ class SignUp {
             return { success: false, message, error: e.code || e }
         }
     }
+
+    checkEmail = async (email) => {
+        try {
+            return await User.findOne({ email }).exec() ? true : false
+        } catch (e) {
+            console.error(e)
+            const message = e.message || e
+            return { success: false, message, error: e.code || e }
+        }
+    }
 }
 
 module.exports = SignUp

@@ -77,22 +77,25 @@ describe('Unit Testing — Users', () => {
     describe('Signup Service', () => {
         it('1) Receives signup s activation invocation and Signup Service "create user" method calls proper services correctly', async () => {
             const SignUpService = require('../../src/services/users/signup.js')
-            const serviceInstance = new SignUpService({ signUser: sinon.fake() })
+            const serviceInstance = new SignUpService({ signUser: sinon.fake(), checkEmail: sinon.fake.returns(false) })
             const fake = sinon.fake.returns(true)
             const fake2 = sinon.fake.returns(true)
             const fake3 = sinon.fake.returns(true)
             const fake4 = sinon.fake.returns(true)
+            const fake5 = sinon.fake.returns(true)
             sinon.replace(serviceInstance, 'validatePassword', fake)
             sinon.replace(serviceInstance, 'validateEmail', fake2)
-            sinon.replace(serviceInstance, 'hashPassword', fake3)
-            sinon.replace(serviceInstance, 'invokeRepository', fake4)
+            sinon.replace(serviceInstance, 'verifyEmail', fake3)
+            sinon.replace(serviceInstance, 'hashPassword', fake4)
+            sinon.replace(serviceInstance, 'invokeRepository', fake5)
 
             await serviceInstance.serve('Username', 'example@mail.com', 'Password1!')
 
             expect(fake.calledWith('Password1!')).to.equal(true)
             expect(fake2.calledWith('example@mail.com')).to.equal(true)
-            expect(fake3.calledWith('Password1!')).to.equal(true)
-            expect(fake4.calledWith('Username', 'example@mail.com')).to.equal(true)
+            expect(fake3.calledWith('example@mail.com')).to.equal(true)
+            expect(fake4.calledWith('Password1!')).to.equal(true)
+            expect(fake5.calledWith('Username', 'example@mail.com')).to.equal(true)
         })
 
         it('2) Validate Password service checks password and returns true if valid format matches', () => {
@@ -140,7 +143,8 @@ describe('Unit Testing — Users', () => {
         it('7) Executes Signup Repository invoking method correctly', async () => {
             const SignUpService = require('../../src/services/users/signup.js')
             const dependency = {
-                signUser: sinon.fake()
+                signUser: sinon.fake(),
+                checkEmail: sinon.fake.returns(false)
             }
             const serviceInstance = new SignUpService(dependency)
 
@@ -148,15 +152,27 @@ describe('Unit Testing — Users', () => {
 
             expect(dependency.signUser.called).to.equal(true)
         })
+
+        it('8) Verify Email service checks email already doesn t exist signed on the DB', async () => {
+            const SignUpService = require('../../src/services/users/signup.js')
+            const dependency = {
+                checkEmail: sinon.fake.returns(false)
+            }
+            const serviceInstance = new SignUpService(dependency)
+
+            await serviceInstance.verifyEmail('example@mail.com')
+
+            expect(dependency.checkEmail.calledWith('example@mail.com')).to.equal(true)
+        })
     })
 
     describe('Signup Repository', () => {
         beforeEach(async () => {
-            return await database.instance.connectDB()
+            await database.instance.connectDB()
         })
 
         afterEach(async () => {
-            return await database.instance.disconnectDB()
+            await database.instance.disconnectDB()
         })
 
         it('1) Receives user object and signs it on the DB', async () => {
@@ -175,8 +191,28 @@ describe('Unit Testing — Users', () => {
             expect(typeof result.id === 'string').to.equal(true)
         })
 
-        xit('', async () => {
+        it('2) Receives email and checks if it already exists on a signed user in the DB returning false if it doesnt', async () => {
+            const RepositorySignUp = require('../../src/repository/users/signup.js')
+            const repositoryInstance = new RepositorySignUp()
+
+            const result = await repositoryInstance.checkEmail('example@mail.com')
+
+            expect(result).to.equal(false)
+        })
+
+        it('3) Receives email and checks if it already exists on a signed user in the DB returning true if it does', async () => {
+            const RepositorySignUp = require('../../src/repository/users/signup.js')
+            const repositoryInstance = new RepositorySignUp()
+            const user = {
+                username: 'Username',
+                email: 'example@mail.com',
+                password: '###'
+            }
             
+            await repositoryInstance.signUser(user)
+            const result = await repositoryInstance.checkEmail('example@mail.com')
+
+            expect(result).to.equal(true)
         })
     })
 })

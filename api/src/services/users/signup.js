@@ -7,7 +7,7 @@ class SignUp {
 
     serve = async (username, email, password) => {
         try {
-            if (this.validatePassword(password) && this.validateEmail(email)) {
+            if (this.validatePassword(password) && this.validateEmail(email) && await this.verifyEmail(email)) {
                 return await this.invokeRepository(username, email, await this.hashPassword(password))
             }
             throw new Error('Invalid input')
@@ -41,6 +41,21 @@ class SignUp {
             const message = e.message || e
             console.error(e)
             return { success: false, message, error: e.code || e }
+        }
+    }
+
+    verifyEmail = async (email) => {
+        try {
+            const flag = await this.dependency.checkEmail(email)
+            if (!flag) {
+                return true
+            } else {
+                throw new Error('This email already exists')
+            }
+        } catch (e) {
+            const message = e.message || e
+            console.error(e)
+            return { sucess: false, message, error: e.code || e }
         }
     }
 
